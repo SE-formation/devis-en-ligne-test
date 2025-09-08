@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demande de Devis - Services Web</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #1e3c72;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: 'Roboto', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .radio-option:hover {
+            border-color: #ffd700;
+            background-color: #fffbf0;
+        }
+
+        .radio-option.selected {
+            border-color: #2a5298;
+            background-color: #f0f4ff;
+        }
+
+        .radio-option input[type="radio"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+        }
+
+        .radio-option label {
+            margin: 0;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .conditional-field {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #ffd700;
+        }
+
+        .conditional-field.show {
+            display: block;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #1e3c72;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                border-radius: 0;
+            }
+            
+            .form-container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Demande de Devis</h1>
+            <p>Obtenez un devis personnalisé pour vos projets web</p>
+        </div>
+        
+        <div class="form-container">
+            <form id="devisForm">
+                <div class="form-group">
+                    <label for="prenom">Prénom *</label>
+                    <input type="text" id="prenom" name="prenom" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nom">Nom *</label>
+                    <input type="text" id="nom" name="nom" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="telephone">Téléphone *</label>
+                    <input type="tel" id="telephone" name="telephone" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Type de prestation *</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="assistance" name="prestation" value="Assistance Web" required>
+                            <label for="assistance">Assistance Web</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="creation" name="prestation" value="Création de site de A à Z" required>
+                            <label for="creation">Création de site de A à Z</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="refonte" name="prestation" value="Refonte de site existant" required>
+                            <label for="refonte">Refonte de site existant</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="domaineField" class="conditional-field">
+                    <label for="domaine">Nom de domaine du site existant</label>
+                    <input type="text" id="domaine" name="domaine" placeholder="exemple: www.monsite.com">
+                </div>
+
+                <button type="submit" class="submit-btn">Envoyer ma demande</button>
+            </form>
+
+            <div class="loading">
+                <p>Envoi en cours...</p>
+            </div>
+
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+
+    <script>
+        // Gestion de l'affichage conditionnel du champ domaine
+        const prestationRadios = document.querySelectorAll('input[name="prestation"]');
+        const domaineField = document.getElementById('domaineField');
+        const radioOptions = document.querySelectorAll('.radio-option');
+
+        // Ajouter les événements pour le style des radio buttons
+        prestationRadios.forEach((radio, index) => {
+            radio.addEventListener('change', function() {
+                // Réinitialiser tous les styles
+                radioOptions.forEach(option => option.classList.remove('selected'));
+                
+                // Ajouter la classe selected à l'option choisie
+                if (this.checked) {
+                    radioOptions[index].classList.add('selected');
+                }
+
+                // Afficher le champ domaine si "refonte" est sélectionné
+                if (this.value === 'Refonte de site existant') {
+                    domaineField.classList.add('show');
+                    document.getElementById('domaine').setAttribute('required', 'required');
+                } else {
+                    domaineField.classList.remove('show');
+                    document.getElementById('domaine').removeAttribute('required');
+                    document.getElementById('domaine').value = '';
+                }
+            });
+        });
+
+        // Gestion de la soumission du formulaire
+        document.getElementById('devisForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.querySelector('.submit-btn');
+            const loading = document.querySelector('.loading');
+            const message = document.getElementById('message');
+            
+            // Désactiver le bouton et afficher le loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Envoi en cours...';
+            loading.style.display = 'block';
+            message.style.display = 'none';
+
+            // Récupérer les données du formulaire
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Ajouter la date et l'heure
+            data.dateCreation = new Date().toLocaleString('fr-FR');
+
+            try {
+                // REMPLACEZ L'URL CI-DESSOUS PAR VOTRE URL GOOGLE APPS SCRIPT
+                const response = await fetch('VOTRE_URL_GOOGLE_APPS_SCRIPT', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    message.className = 'message success';
+                    message.textContent = 'Votre demande a été envoyée avec succès ! Nous vous recontacterons rapidement.';
+                    message.style.display = 'block';
+                    this.reset();
+                    
+                    // Réinitialiser les styles des radio buttons
+                    radioOptions.forEach(option => option.classList.remove('selected'));
+                    domaineField.classList.remove('show');
+                } else {
+                    throw new Error('Erreur lors de l\'envoi');
+                }
+            } catch (error) {
+                message.className = 'message error';
+                message.textContent = 'Une erreur est survenue lors de l\'envoi. Veuillez réessayer.';
+                message.style.display = 'block';
+            } finally {
+                // Réactiver le bouton
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Envoyer ma demande';
+                loading.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
